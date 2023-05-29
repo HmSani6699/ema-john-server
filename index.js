@@ -28,10 +28,11 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const prodectsCollaction =client.db('prodectsDB').collection('prodects');
+    const prodectsCollaction =client.db('emaJhonDB').collection('prodects');
 
-    app.get('/prodects',async(req,res)=>{
+    app.get('/products',async(req,res)=>{
         const prodects = await prodectsCollaction.find().toArray();
+        console.log(prodects);
         res.send(prodects)
     })
 
