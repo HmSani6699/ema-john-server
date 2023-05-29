@@ -32,8 +32,12 @@ async function run() {
 
     app.get('/products',async(req,res)=>{
         const prodects = await prodectsCollaction.find().toArray();
-        console.log(prodects);
         res.send(prodects)
+    });
+
+    app.get('/totalProduct',async(req,res)=>{
+      const result = await prodectsCollaction.estimatedDocumentCount();
+      res.send({totalProducts:result})
     })
 
 
