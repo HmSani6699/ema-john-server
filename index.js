@@ -31,6 +31,7 @@ async function run() {
     const prodectsCollaction =client.db('emaJhonDB').collection('prodects');
 
     app.get('/products',async(req,res)=>{
+      console.log(req.query);
         const prodects = await prodectsCollaction.find().toArray();
         res.send(prodects)
     });
