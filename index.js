@@ -1,8 +1,8 @@
 const express = require('express')
 const app = express()
-const cors=require('cors');
+const cors = require('cors');
 require('dotenv').config()
-const port = process.env.PORT||5000;
+const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
@@ -28,17 +28,20 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
-    const prodectsCollaction =client.db('emaJhonDB').collection('prodects');
+    const prodectsCollaction = client.db('emaJhonDB').collection('prodects');
 
-    app.get('/products',async(req,res)=>{
+    app.get('/products', async (req, res) => {
       console.log(req.query);
-        const prodects = await prodectsCollaction.find().toArray();
-        res.send(prodects)
+      const page = parseInt(req.query.page) || 0;
+      const limit = parseInt(req.query.limit) || 10;
+      const skip = page*limit;
+      const prodects = await prodectsCollaction.find().skip(skip).limit(limit).toArray();
+      res.send(prodects)
     });
 
-    app.get('/totalProduct',async(req,res)=>{
+    app.get('/totalProduct', async (req, res) => {
       const result = await prodectsCollaction.estimatedDocumentCount();
-      res.send({totalProducts:result})
+      res.send({ totalProducts: result })
     })
 
 
