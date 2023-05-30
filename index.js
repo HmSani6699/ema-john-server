@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors');
 require('dotenv').config()
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 // meddaleware
@@ -34,7 +34,7 @@ async function run() {
       console.log(req.query);
       const page = parseInt(req.query.page) || 0;
       const limit = parseInt(req.query.limit) || 10;
-      const skip = page*limit;
+      const skip = page * limit;
       const prodects = await prodectsCollaction.find().skip(skip).limit(limit).toArray();
       res.send(prodects)
     });
@@ -42,6 +42,17 @@ async function run() {
     app.get('/totalProduct', async (req, res) => {
       const result = await prodectsCollaction.estimatedDocumentCount();
       res.send({ totalProducts: result })
+    })
+
+    app.post('/productsIDS', async (req, res) => {
+      const ids = req.body;
+      const obectIds = ids.map(id =>new ObjectId(id));
+      const query = { _id: { $in: obectIds } }
+      console.log(ids);
+
+      const result = await prodectsCollaction.find(query).toArray();
+      res.send(result)
+
     })
 
 
@@ -57,7 +68,7 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('Hello ena john  World!')
 })
 
 app.listen(port, () => {
